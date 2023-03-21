@@ -17,7 +17,7 @@ st.set_page_config(
 
 
 
-API_URL = "https://beam.slai.io/1ck44"
+API_URL = "https://beam.slai.io/hkxg7"
 headers = {
   "Accept": "*/*",
   "Accept-Encoding": "gzip, deflate",
@@ -53,42 +53,43 @@ def get_text():
     input_text = st.text_input("You: ","", key="input")
     return input_text 
 
-
-user_input = get_text()
-
-if gender:
-    payload = {
-        "query":{
-        "text": user_input,
-        "image": None 
-        },
-        "query_context":'chat',
-        "identifier":"Mamon",
-        "gender":gender,
-        "limit":"10",
-        "filters":{
-        "sizes": []
-        }
-      }
-    output = query(payload)
-    
-
-    st.session_state.past.append(user_input)
-    st.session_state.generated.append(output["prompt"])
-
-    images = []
-    for pred in output['predictions']:
-        #print(pred['metadata']['image'])
-        data = requests.get(pred['metadata']['image'])
-        img = Image.open(BytesIO(data.content))
-        img = img.resize((200, 200))
-        images.append(img)
-    st.image(images)
-
-    if st.session_state['generated']:
+if __name__ == "__main__:
 
 
-        for i in range(len(st.session_state['generated'])-1, -1, -1):
-            message(st.session_state["generated"][i], key=str(i))
-            message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+    user_input = get_text()
+
+    if gender:
+        payload = {
+            "query":{
+            "text": user_input,
+            "image": None 
+            },
+            "query_context":'chat',
+            "identifier":"Mamon",
+            "gender":gender,
+            "limit":"10",
+            "filters":{
+            "sizes": []
+            }
+          }
+        output = query(payload)
+ 
+        st.session_state.past.append(user_input)
+        st.session_state.generated.append(output["prompt"])
+
+        images = []
+        for pred in output['predictions']:
+            #print(pred['metadata']['image'])
+            data = requests.get(pred['metadata']['image'])
+            img = Image.open(BytesIO(data.content))
+            img = img.resize((200, 200))
+            images.append(img)
+        st.image(images)
+
+        if st.session_state['generated']:
+
+
+            for i in range(len(st.session_state['generated'])-1, -1, -1):
+                message(st.session_state["generated"][i], key=str(i))
+                message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
 
