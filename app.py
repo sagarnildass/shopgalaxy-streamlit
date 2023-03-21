@@ -53,7 +53,7 @@ def get_text():
     input_text = st.text_input("You: ","", key="input")
     return input_text 
 
-if __name__ == "__main__:
+if __name__ == "__main__":
 
 
     user_input = get_text()
